@@ -27,16 +27,19 @@ const layout = {
   },
 };
 const Product = () => {
-  const token = "adasdasd";
+  const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZWQwYmVmZTUzYWVkNjAwMTdlNDJmZjYiLCJ0eXBlIjoiSURfVE9LRU4iLCJpYXQiOjE1OTI5NjUyOTksImV4cCI6MTU5MzA1MTY5OX0.hLEVBB3d7o8AKsC5hl60j1n_KWaEa743FvjW4mPV9j0";
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [product, setProduct] = useState({});
+  const [search, setSearch] = useState("");
+
   const fetchData = async () => {
-    const data = await ApiClient.ApiGet("products", token)
+    await ApiClient.ApiGet("/products", token)
       .then((res) => {
         setLoading(false);
-        setData(data);
+        setData(res.data);
       })
       .catch((err) => {
         console.log("err", err);
@@ -45,6 +48,9 @@ const Product = () => {
   useEffect(() => {
     fetchData();
   }, ...[]);
+  const searchFilter = data.filter((product) => {
+    return product.name.toLowerCase().includes(search.toLowerCase());
+  });
   return (
     <div
       className="site-layout-background"
@@ -56,6 +62,9 @@ const Product = () => {
         </Button>
 
         <Search
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
           size="large"
           style={{ marginLeft: 138, width: 600 }}
           placeholder="input search text"
@@ -64,7 +73,7 @@ const Product = () => {
       </div>
       <List
         grid={{ gutter: 16, column: 4 }}
-        dataSource={data}
+        dataSource={searchFilter}
         renderItem={(item, index) => {
           return (
             <List.Item>
@@ -111,10 +120,30 @@ const Product = () => {
                         name={item.id}
                         label="Tên sản phẩm"
                       >
-                        <Input />
+                        <Input
+                          onChange={(e) => {
+                            if (e.target.value === "") {
+                              setProduct({ ...product, name: undefined });
+                            } else {
+                              setProduct({ ...product, name: e.target.value });
+                            }
+                          }}
+                        />
                       </Form.Item>
                       <Form.Item hasFeedback name={item.id} label="Số lượng">
-                        <Input />
+                        <Input
+                          type="number"
+                          onChange={(e) => {
+                            if (e.target.value === "") {
+                              setProduct({ ...product, amount: undefined });
+                            } else {
+                              setProduct({
+                                ...product,
+                                amount: e.target.value,
+                              });
+                            }
+                          }}
+                        />
                       </Form.Item>
 
                       <Form.Item
@@ -122,36 +151,112 @@ const Product = () => {
                         name={item.id}
                         label="Giá tiền một sản phẩm"
                       >
-                        <Input />
+                        <Input
+                          onChange={(e) => {
+                            if (e.target.value === "") {
+                              setProduct({ ...product, price: undefined });
+                            } else {
+                              setProduct({ ...product, price: e.target.value });
+                            }
+                          }}
+                        />
                       </Form.Item>
                       <Form.Item
                         hasFeedback
                         name={item.id}
                         label="Giới thiệu 1"
                       >
-                        <TextArea />
+                        <TextArea
+                          onChange={(e) => {
+                            if (e.target.value === "") {
+                              setProduct({
+                                ...product,
+                                description1: undefined,
+                              });
+                            } else {
+                              setProduct({
+                                ...product,
+                                description1: e.target.value,
+                              });
+                            }
+                          }}
+                        />
                       </Form.Item>
                       <Form.Item
                         hasFeedback
                         name={item.id}
                         label="Giới thiệu 2"
                       >
-                        <TextArea />
+                        <TextArea
+                          onChange={(e) => {
+                            if (e.target.value === "") {
+                              setProduct({
+                                ...product,
+                                description2: undefined,
+                              });
+                            } else {
+                              setProduct({
+                                ...product,
+                                description2: e.target.value,
+                              });
+                            }
+                          }}
+                        />
                       </Form.Item>
                       <Form.Item
                         hasFeedback
                         name={item.id}
                         label="Giới thiệu 3"
                       >
-                        <TextArea />
+                        <TextArea
+                          onChange={(e) => {
+                            if (e.target.value === "") {
+                              setProduct({
+                                ...product,
+                                description3: undefined,
+                              });
+                            } else {
+                              setProduct({
+                                ...product,
+                                description3: e.target.value,
+                              });
+                            }
+                          }}
+                        />
                       </Form.Item>
                       <Form.Item name={item.id} label="Ảnh sản phẩm">
-                        <Input />
+                        <Input
+                          onChange={(e) => {
+                            if (e.target.value === "") {
+                              setProduct({ ...product, image: undefined });
+                            } else {
+                              setProduct({ ...product, image: e.target.value });
+                            }
+                          }}
+                        />
                       </Form.Item>
 
                       <Form.Item wrapperCol={{ span: 10, offset: 10 }}>
-                        <Button type="primary" htmlType="submit">
-                          Thêm sản phẩm
+                        <Button
+                          onClick={async () => {
+                            await ApiClient.ApiPut(
+                              `products/${item.id}`,
+                              product,
+                              token
+                            )
+                              .then((res) => {
+                                setVisible(false);
+                                setData(data);
+                                message.success("Sửa thành công!");
+                              })
+                              .catch((err) => {
+                                message.error("Có lỗi xảy ra!");
+                              });
+                          }}
+                          type="primary"
+                          htmlType="submit"
+                        >
+                          Sửa thông thin sản phẩm
                         </Button>
                       </Form.Item>
                     </Form>
