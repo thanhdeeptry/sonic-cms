@@ -20,19 +20,19 @@ const ProtectedRoute = ({
     );
   }
   return (
-    <Route path={path} {...rest} render={(props) => <Component {...props} />} />
+    <Route path={path} {...rest} render={props => <Component {...props} />} />
   );
 };
-export default function renderRoutes() {
+export default function renderRoutes(isLogin) {
   return (
     <Switch>
       <Route exact path="/login" component={Login}></Route>
-      <Route
+      <ProtectedRoute
         exact
         path="/"
         component={Product}
-        // isLogin={isLogin}
-      ></Route>
+        isLogin={isLogin}
+      ></ProtectedRoute>
       {/* <ProtectedRoute exact path="/addproduct" component={Addproduct}></ProtectedRoute> */}
     </Switch>
   );

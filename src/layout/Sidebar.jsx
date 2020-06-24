@@ -10,14 +10,24 @@ import {
   AppstoreAddOutlined,
   AuditOutlined,
   LineChartOutlined,
-  LogoutOutlined,
+  LogoutOutlined
 } from "@ant-design/icons";
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 const Sidebar = () => {
   return (
-    <Sider>
+    <Sider
+      width={242}
+      style={{
+        // background: "#333132",
+        overflow: "auto",
+        height: "100vh",
+        zIndex: 100,
+        position: "fixed",
+        left: 0
+      }}
+    >
       <div className="logo" />
       <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
         <SubMenu key="1" icon={<AppstoreOutlined />} title="Sản phẩm">
