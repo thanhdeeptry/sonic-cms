@@ -6,13 +6,12 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 import { AuthContext } from "../contexts";
 const { Content, Header, Footer } = Layout;
 
-const Index = React.memo(() => {
+const Index = () => {
   const { state, actions } = useContext(AuthContext);
   let isLogin = false;
   if (state.token) {
     isLogin = true;
   }
-
   return (
     <div style={{ backgroundColor: "#f0f2f5", height: "100vh" }}>
       {isLogin ? (
@@ -33,5 +32,5 @@ const Index = React.memo(() => {
       </Footer>
     </div>
   );
-});
+};
 export default withRouter(Index);

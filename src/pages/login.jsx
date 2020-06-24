@@ -24,19 +24,17 @@ const tailLayout = {
 const Login = () => {
   const { state, actions } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState({});
-  if (state.token) {
-    history.push("/");
-  }
-
   const onSubmit = async values => {
     setLoading(true);
     const response = await ApiPost("user/login", values);
     const { idToken } = response.data;
-    history.push("/");
+    if (idToken) {
+      history.push("/");
+    }
     actions.setToken(idToken);
     setLoading(false);
   };
+
   return (
     <Styled.Container>
       <div className="container">

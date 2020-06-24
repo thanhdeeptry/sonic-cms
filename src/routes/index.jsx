@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 
 import Product from "../pages/product";
 import Login from "../pages/login";
@@ -19,21 +19,22 @@ const ProtectedRoute = ({
       </Route>
     );
   }
-  return (
-    <Route path={path} {...rest} render={props => <Component {...props} />} />
-  );
+  console.log("aasds");
+  return <Route path={path} {...rest} render={() => <Component />} />;
 };
 export default function renderRoutes(isLogin) {
   return (
-    <Switch>
-      <Route exact path="/login" component={Login}></Route>
-      <ProtectedRoute
-        exact
-        path="/"
-        component={Product}
-        isLogin={isLogin}
-      ></ProtectedRoute>
-      {/* <ProtectedRoute exact path="/addproduct" component={Addproduct}></ProtectedRoute> */}
-    </Switch>
+    <BrowserRouter>
+      <Switch>
+        <Route exact path="/login" component={() => <Login />}></Route>
+        <ProtectedRoute
+          exact
+          path="/"
+          component={Product}
+          isLogin={isLogin}
+        ></ProtectedRoute>
+        {/* <ProtectedRoute exact path="/addproduct" component={Addproduct}></ProtectedRoute> */}
+      </Switch>
+    </BrowserRouter>
   );
 }

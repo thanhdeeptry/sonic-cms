@@ -1,8 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import renderApp from "./App";
-import Product from "./pages/product";
 import * as serviceWorker from "./serviceWorker";
 import RenderApp from "./App";
 
