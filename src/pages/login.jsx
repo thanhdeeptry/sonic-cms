@@ -9,27 +9,28 @@ import { from } from "rxjs";
 
 const layout = {
   labelCol: {
-    span: 8
+    span: 8,
   },
   wrapperCol: {
-    span: 16
-  }
+    span: 16,
+  },
 };
 const tailLayout = {
   wrapperCol: {
     offset: 8,
-    span: 16
-  }
+    span: 16,
+  },
 };
 const Login = () => {
   const { state, actions } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-  const onSubmit = async values => {
+  const onSubmit = async (values) => {
     setLoading(true);
     const response = await ApiPost("user/login", values);
     const { idToken } = response.data;
     if (idToken) {
       history.push("/");
+      localStorage.setItem("token", idToken);
     }
     actions.setToken(idToken);
     setLoading(false);
@@ -58,9 +59,6 @@ const Login = () => {
             />
           </Form.Item>
           <Form.Item>
-            <a className="login-form-forgot" href="">
-              Forgot password
-            </a>
             <Button
               // style={{ alignSelf: "center" }}
               loading={loading}
@@ -70,7 +68,6 @@ const Login = () => {
             >
               Log in
             </Button>
-            Or <a href="">register now!</a>
           </Form.Item>
         </Form>
       </div>

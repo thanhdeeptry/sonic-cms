@@ -10,7 +10,7 @@ import {
   AppstoreAddOutlined,
   AuditOutlined,
   LineChartOutlined,
-  LogoutOutlined
+  LogoutOutlined,
 } from "@ant-design/icons";
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -25,34 +25,37 @@ const Sidebar = () => {
         height: "100vh",
         zIndex: 100,
         position: "fixed",
-        left: 0
+        left: 0,
       }}
     >
       <div className="logo" />
       <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
         <SubMenu key="1" icon={<AppstoreOutlined />} title="Sản phẩm">
-          <Menu.Item key="2" icon={<MobileOutlined />}>
-            <Link to="/home"> Điện thoại</Link>
+          <Menu.Item key="/home" icon={<MobileOutlined />}>
+            <Link to="/home">Tất cả sản phẩm</Link>
           </Menu.Item>
-          <Menu.Item key="3" icon={<LaptopOutlined />}>
-            Laptop
+          <Menu.Item key="/phone" icon={<MobileOutlined />}>
+            <Link to="/phone">Điện thoại</Link>
           </Menu.Item>
-          <Menu.Item key="4" icon={<ApiOutlined />}>
-            Phụ kiện
+          <Menu.Item key="/laptop" icon={<LaptopOutlined />}>
+            <Link to="/laptop">Laptop</Link>
+          </Menu.Item>
+          <Menu.Item key="/gear" icon={<ApiOutlined />}>
+            <Link to="/gear">Phụ kiện</Link>
           </Menu.Item>
         </SubMenu>
-        <Menu.Item key="5" icon={<AppstoreAddOutlined />}>
+        <Menu.Item key="/addproduct" icon={<AppstoreAddOutlined />}>
           <Link to="/addproduct">Thêm sản phẩm</Link>
         </Menu.Item>
-        <Menu.Item key="7" icon={<AuditOutlined />}>
-          Quản lí hoá đơn
+        <Menu.Item key="/bill" icon={<AuditOutlined />}>
+          <Link to="/bill">Quản lí hóa đơn</Link>
         </Menu.Item>
-        <Menu.Item key="8" icon={<LineChartOutlined />}>
-          Thống kê doanh thu
+        <Menu.Item key="/" icon={<LineChartOutlined />}>
+          <Link to="/">Thống kê</Link>
         </Menu.Item>
 
         <Menu.Item key="9" icon={<LogoutOutlined />}>
-          <Link to="/">ĐĂNG XUẤT</Link>
+          <Link to="/login">ĐĂNG XUẤT</Link>
         </Menu.Item>
       </Menu>
     </Sider>

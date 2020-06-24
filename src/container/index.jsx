@@ -17,9 +17,7 @@ const Index = () => {
       {isLogin ? (
         <Layout>
           <Sidebar></Sidebar>
-          <Content style={{ margin: "24px 24px 0" }}>
-            {renderRoutes(isLogin)}
-          </Content>
+          <Content style={{ marginLeft: 230 }}>{renderRoutes(isLogin)}</Content>
         </Layout>
       ) : (
         <Content style={{ margin: "24px 24px 0" }}>

@@ -1,69 +1,90 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Table, Badge, Menu, Dropdown, Button } from "antd";
 import * as ApiClient from "../helpers/ApiClient";
+import { AuthContext } from "../contexts";
 import Item from "antd/lib/list/Item";
 const BillManage = () => {
   const [data, setData] = useState();
-  let token = localStorage.getItem("");
+  const { state, actions } = useContext(AuthContext);
+  let token = state.token;
   const fetchData = async () => {
-    await ApiClient.ApiGet("bills", token).then((res) => {
-      setData(res);
+    await ApiClient.ApiGet("admin/bills", token).then((res) => {
+      console.log("res", res);
+      setData(res.data);
     });
   };
   useEffect(() => {
     fetchData();
-  }, ...[]);
+  }, []);
+  console.log(
+    "dataadsdasd",
+    data &&
+      data.map((item) => {
+        return item.products;
+      })
+  );
+  const _data =
+    data &&
+    data.map((item) => {
+      return item.products;
+    });
   const expandedRowRender = () => {
     const columns = [
       {
         title: "Mã sản phẩm",
         render: (record) => {
-          return record.map((item) => {
-            return <p>{item.id}</p>;
-          });
+          return <p>{record.id}</p>;
+          // console.log(record);
         },
       },
       {
         title: "Tên sản phẩm",
         render: (record) => {
-          return record.map((item) => {
-            return <p>{item.name}</p>;
-          });
+          // return record.map((item) => {
+          //   return <p>{item.name}</p>;
+          // });
         },
       },
       {
         title: "Hình ảnh",
         render: (record) => {
-          return record.map((item) => {
-            return <img src={item.image} alt="" height={150}></img>;
-          });
+          // return record.map((item) => {
+          //   return <img src={item.image} alt="" height={150}></img>;
+          // });
         },
       },
       {
         title: "Số lượng",
         render: (record) => {
-          return record.map((item) => {
-            return <p>{item.amount}</p>;
-          });
+          // return record.map((item) => {
+          //   return <p>{item.amount}</p>;
+          // });
         },
       },
       {
-        title: "Tổng tiền",
+        title: "Giá tiền",
         render: (record) => {
-          return record.map((item) => {
-            return <p>{item.to}</p>;
-          });
+          // return record.map((item) => {
+          //   return <p>{item.to}</p>;
+          // });
         },
       },
     ];
-    return <Table columns={columns} dataSource={data} pagination={false} />;
+    return (
+      <Table
+        rowKey="id"
+        columns={columns}
+        dataSource={_data}
+        pagination={false}
+      />
+    );
   };
 
   const columns = [
     { title: "Mã hóa đơn", dataIndex: "billCode", key: "billCode" },
     { title: "Mã người dùng", dataIndex: "userId", key: "userId" },
     { title: "Số điện thoại", dataIndex: "phoneNumber", key: "phoneNumber" },
-    { title: "Tổng tiền", dataIndex: "upgradeNum", key: "upgradeNum" },
+    { title: "Ngày đặt hàng", dataIndex: "createdAt", key: "createdAt" },
     {
       title: "Trạng thái",
       key: "operation",
@@ -79,11 +100,18 @@ const BillManage = () => {
   ];
 
   return (
-    <Table
-      className="components-table-demo-nested"
-      columns={columns}
-      expandable={{ expandedRowRender }}
-      dataSource={data}
-    />
+    <div>
+      <div align="center">
+        <b style={{ fontSize: 28 }}>Quản lí hóa đơn</b>
+      </div>
+      <Table
+        rowKey="_id"
+        className="components-table-demo-nested"
+        columns={columns}
+        expandable={{ expandedRowRender }}
+        dataSource={data}
+      />
+    </div>
   );
 };
+export default BillManage;

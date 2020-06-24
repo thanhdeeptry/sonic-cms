@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./App.less";
 import {
   List,
@@ -8,7 +8,7 @@ import {
   BackTop,
   Modal,
   Form,
-  message
+  message,
 } from "antd";
 import { Input } from "antd";
 import { AudioOutlined } from "@ant-design/icons";
@@ -16,19 +16,20 @@ import * as ApiClient from "../helpers/ApiClient";
 import ReadMoreAndLess from "react-read-more-less";
 import { UpSquareOutlined } from "@ant-design/icons";
 import history from "../services/history";
+import { AuthContext } from "../contexts";
 const { Search } = Input;
 const { TextArea } = Input;
 const layout = {
   labelCol: {
-    span: 6
+    span: 6,
   },
   wrapperCol: {
-    span: 12
-  }
+    span: 12,
+  },
 };
 const Product = () => {
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI1ZWQwYmVmZTUzYWVkNjAwMTdlNDJmZjYiLCJ0eXBlIjoiSURfVE9LRU4iLCJpYXQiOjE1OTI5NjUyOTksImV4cCI6MTU5MzA1MTY5OX0.hLEVBB3d7o8AKsC5hl60j1n_KWaEa743FvjW4mPV9j0";
+  const { state, actions } = useContext(AuthContext);
+  const token = state.token;
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
@@ -37,11 +38,11 @@ const Product = () => {
 
   const fetchData = async () => {
     await ApiClient.ApiGet("/products", token)
-      .then(res => {
+      .then((res) => {
         setLoading(false);
         setData(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("err", err);
       });
   };
@@ -50,7 +51,7 @@ const Product = () => {
   }, ...[]);
   const searchFilter =
     data &&
-    data.filter(product => {
+    data.filter((product) => {
       return product.name.toLowerCase().includes(search.toLowerCase());
     });
   return (
@@ -64,7 +65,7 @@ const Product = () => {
         </Button>
 
         <Search
-          onChange={e => {
+          onChange={(e) => {
             setSearch(e.target.value);
           }}
           size="large"
@@ -123,7 +124,7 @@ const Product = () => {
                         label="Tên sản phẩm"
                       >
                         <Input
-                          onChange={e => {
+                          onChange={(e) => {
                             if (e.target.value === "") {
                               setProduct({ ...product, name: undefined });
                             } else {
@@ -135,13 +136,13 @@ const Product = () => {
                       <Form.Item hasFeedback name={item.id} label="Số lượng">
                         <Input
                           type="number"
-                          onChange={e => {
+                          onChange={(e) => {
                             if (e.target.value === "") {
                               setProduct({ ...product, amount: undefined });
                             } else {
                               setProduct({
                                 ...product,
-                                amount: e.target.value
+                                amount: e.target.value,
                               });
                             }
                           }}
@@ -154,7 +155,7 @@ const Product = () => {
                         label="Giá tiền một sản phẩm"
                       >
                         <Input
-                          onChange={e => {
+                          onChange={(e) => {
                             if (e.target.value === "") {
                               setProduct({ ...product, price: undefined });
                             } else {
@@ -169,16 +170,16 @@ const Product = () => {
                         label="Giới thiệu 1"
                       >
                         <TextArea
-                          onChange={e => {
+                          onChange={(e) => {
                             if (e.target.value === "") {
                               setProduct({
                                 ...product,
-                                description1: undefined
+                                description1: undefined,
                               });
                             } else {
                               setProduct({
                                 ...product,
-                                description1: e.target.value
+                                description1: e.target.value,
                               });
                             }
                           }}
@@ -190,16 +191,16 @@ const Product = () => {
                         label="Giới thiệu 2"
                       >
                         <TextArea
-                          onChange={e => {
+                          onChange={(e) => {
                             if (e.target.value === "") {
                               setProduct({
                                 ...product,
-                                description2: undefined
+                                description2: undefined,
                               });
                             } else {
                               setProduct({
                                 ...product,
-                                description2: e.target.value
+                                description2: e.target.value,
                               });
                             }
                           }}
@@ -211,16 +212,16 @@ const Product = () => {
                         label="Giới thiệu 3"
                       >
                         <TextArea
-                          onChange={e => {
+                          onChange={(e) => {
                             if (e.target.value === "") {
                               setProduct({
                                 ...product,
-                                description3: undefined
+                                description3: undefined,
                               });
                             } else {
                               setProduct({
                                 ...product,
-                                description3: e.target.value
+                                description3: e.target.value,
                               });
                             }
                           }}
@@ -228,7 +229,7 @@ const Product = () => {
                       </Form.Item>
                       <Form.Item name={item.id} label="Ảnh sản phẩm">
                         <Input
-                          onChange={e => {
+                          onChange={(e) => {
                             if (e.target.value === "") {
                               setProduct({ ...product, image: undefined });
                             } else {
@@ -246,12 +247,12 @@ const Product = () => {
                               product,
                               token
                             )
-                              .then(res => {
+                              .then((res) => {
                                 setVisible(false);
                                 setData(data);
                                 message.success("Sửa thành công!");
                               })
-                              .catch(err => {
+                              .catch((err) => {
                                 message.error("Có lỗi xảy ra!");
                               });
                           }}
@@ -266,12 +267,14 @@ const Product = () => {
                 </Modal>
                 <Button
                   onClick={async () => {
-                    await ApiClient.ApiGet(`products/${item._id}`).then(res => {
-                      data.splice(index, 1);
-                      setData(data);
-                      history.push();
-                      message.success("Xóa thành công!");
-                    });
+                    await ApiClient.ApiGet(`products/${item._id}`).then(
+                      (res) => {
+                        data.splice(index, 1);
+                        setData(data);
+                        history.push();
+                        message.success("Xóa thành công!");
+                      }
+                    );
                   }}
                   danger
                   style={{ margin: 10, width: 120, borderRadius: 25 }}
@@ -294,7 +297,7 @@ const Product = () => {
             backgroundColor: "#1088e9",
             color: "#fff",
             textAlign: "center",
-            fontSize: 14
+            fontSize: 14,
           }}
         >
           {" "}
