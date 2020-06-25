@@ -12,6 +12,7 @@ import {
   LineChartOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
+import history from "../services/history";
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
@@ -22,10 +23,9 @@ const Sidebar = () => {
       style={{
         // background: "#333132",
         overflow: "auto",
-        height: "100vh",
-        zIndex: 100,
         position: "fixed",
-        left: 0,
+        height: "100%",
+        marginTop: 50,
       }}
     >
       <div className="logo" />
@@ -55,7 +55,15 @@ const Sidebar = () => {
         </Menu.Item>
 
         <Menu.Item key="9" icon={<LogoutOutlined />}>
-          <Link to="/login">ĐĂNG XUẤT</Link>
+          <a
+            href="/login"
+            onClick={() => {
+              localStorage.removeItem("_token");
+              history.push("/login");
+            }}
+          >
+            ĐĂNG XUẤT
+          </a>
         </Menu.Item>
       </Menu>
     </Sider>

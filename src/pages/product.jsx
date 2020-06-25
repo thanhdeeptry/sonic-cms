@@ -48,7 +48,7 @@ const Product = () => {
   };
   useEffect(() => {
     fetchData();
-  }, ...[]);
+  }, []);
   const searchFilter =
     data &&
     data.filter((product) => {
@@ -75,7 +75,13 @@ const Product = () => {
         />
       </div>
       <List
-        grid={{ gutter: 16, column: 4 }}
+        pagination={{
+          onChange: (page) => {
+            console.log(page);
+          },
+          pageSize: 4,
+        }}
+        grid={{ gutter: 16, column: 2 }}
         dataSource={searchFilter}
         renderItem={(item, index) => {
           return (
@@ -104,7 +110,7 @@ const Product = () => {
                     setVisible(true);
                   }}
                   type="primary"
-                  style={{ margin: 10, width: 120, borderRadius: 25 }}
+                  style={{ margin: 10 }}
                 >
                   Sửa thông tin sản phẩm
                 </Button>
@@ -259,7 +265,15 @@ const Product = () => {
                           type="primary"
                           htmlType="submit"
                         >
-                          Sửa thông thin sản phẩm
+                          Xác nhận
+                        </Button>
+                        <Button
+                          danger
+                          onClick={() => {
+                            setVisible(false);
+                          }}
+                        >
+                          Cancel
                         </Button>
                       </Form.Item>
                     </Form>

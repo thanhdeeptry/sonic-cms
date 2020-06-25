@@ -2,15 +2,17 @@ import React from "react";
 import "./App.less";
 import { Router } from "react-router-dom";
 import history from "./services/history";
-import Index from "./container";
-import { AuthContextProvider } from "./contexts/index";
-function RenderApp() {
+import App from "./container";
+import { AuthContextProvider, AppContextProvider } from "./contexts/index";
+const RenderApp = () => {
   return (
     <AuthContextProvider>
-      <Router history={history}>
-        <Index />
-      </Router>
+      <AppContextProvider>
+        <Router history={history}>
+          <App />
+        </Router>
+      </AppContextProvider>
     </AuthContextProvider>
   );
-}
+};
 export default RenderApp;

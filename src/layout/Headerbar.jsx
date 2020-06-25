@@ -6,7 +6,10 @@ const { Header } = Layout;
 
 const Headerbar = () => {
   return (
-    <Header theme="dark" style={{ padding: 0 }}>
+    <Header
+      style={{ position: "fixed", zIndex: 1, width: "100%" }}
+      theme="dark"
+    >
       <div>
         <Avatar
           style={{ float: "right", margin: 15 }}
@@ -17,7 +20,7 @@ const Headerbar = () => {
             color: "white",
             float: "left",
             marginTop: 10,
-            marginLeft: 40,
+            marginLeft: 10,
           }}
           level={1}
         >

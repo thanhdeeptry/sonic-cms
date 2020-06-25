@@ -16,7 +16,7 @@ import { Typography } from "antd";
 const { Title } = Typography;
 const Statistics = () => {
   const [data, setData] = useState();
-  let token = localStorage.getItem("");
+  const token = localStorage.getItem("token");
   const fetchData = async () => {
     const _data = await ApiClient.ApiGet("statistics", token);
     console.log("_data", _data);
@@ -30,7 +30,7 @@ const Statistics = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, ...[]);
   return (
     <div align="center">
       <Title>Thống kê doanh thu</Title>

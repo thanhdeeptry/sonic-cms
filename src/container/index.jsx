@@ -2,33 +2,50 @@ import React, { useContext, useEffect } from "react";
 import { Layout } from "antd";
 import renderRoutes from "../routes";
 import Sidebar from "../layout/Sidebar";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import Headerbar from "../layout/Headerbar";
 import { AuthContext } from "../contexts";
-const { Content, Header, Footer } = Layout;
+import history from "../services/history";
+const { Content, Footer } = Layout;
 
-const Index = () => {
-  const { state, actions } = useContext(AuthContext);
+const App = () => {
   let isLogin = false;
+  const { state } = useContext(AuthContext);
+  // const token = localStorage.getItem("_token");
   if (state.token) {
     isLogin = true;
+  } else {
+    isLogin = false;
   }
-  return (
-    <div style={{ backgroundColor: "#f0f2f5", height: "100vh" }}>
-      {isLogin ? (
+  console.log("login", isLogin);
+  if (isLogin === true) {
+    return (
+      <div style={{ backgroundColor: "#f0f2f5", height: "100vh" }}>
         <Layout>
-          <Sidebar></Sidebar>
-          <Content style={{ marginLeft: 230 }}>{renderRoutes(isLogin)}</Content>
+          <Headerbar></Headerbar>
+          <Layout style={{ minHeight: "100vh" }}>
+            <Sidebar></Sidebar>
+            <Content style={{ marginLeft: 230, marginTop: 60 }}>
+              {renderRoutes(isLogin)}
+            </Content>
+          </Layout>
+          <Layout>
+            <div style={{ backgroundColor: "#2dfa2d" }}>
+              <Footer style={{ textAlign: "center" }}>
+                Powered by Nguyen Hop Thanh
+              </Footer>
+            </div>
+          </Layout>
         </Layout>
-      ) : (
-        <Content style={{ margin: "24px 24px 0" }}>
-          {renderRoutes(isLogin)}
-        </Content>
-      )}
-
-      <Footer style={{ textAlign: "right", padding: "24px" }}>
-        Sonic admin by <strong>Wabi-sabi</strong> v0.1
-      </Footer>
-    </div>
-  );
+      </div>
+    );
+  }
+  if (isLogin === false) {
+    localStorage.removeItem("_token");
+    return (
+      <div style={{ backgroundColor: "#f0f2f5", height: "100vh" }}>
+        <Content style={{ marginLeft: 230 }}>{renderRoutes(isLogin)}</Content>
+      </div>
+    );
+  }
 };
-export default withRouter(Index);
+export default App;
